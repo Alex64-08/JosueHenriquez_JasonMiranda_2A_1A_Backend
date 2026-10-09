@@ -62,16 +62,12 @@ public class VehiculosController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<VehiculosDTO>> EliminarVehiculos(@PathVariable Long id) {
-        try {
-            VehiculosDTO dto = service.eliminarVehiculo(id);
-            ApiResponse<VehiculosDTO> response = new ApiResponse<>(true,"Vehiculos eliminado con exito.",dto);
-
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            ApiResponse<VehiculosDTO> respuestaError = new ApiResponse<>(false,"No se ha podido eliminar el registro del cliente.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuestaError);
+    public ResponseEntity<Void> EliminarVehiculos(@PathVariable Long id) {
+        boolean eliminado = service.eliminarVehiculo(id);
+        if (eliminado) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 

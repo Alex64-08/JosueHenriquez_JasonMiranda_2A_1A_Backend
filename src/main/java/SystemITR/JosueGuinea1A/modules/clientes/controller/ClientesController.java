@@ -62,17 +62,15 @@ public class ClientesController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<ClientesDTO>> EliminarCliente(@PathVariable Long id) {
-        try {
-            ClientesDTO dto = service.eliminarCliente(id);
-            ApiResponse<ClientesDTO> response = new ApiResponse<>(true,"Cliente eliminado con exito.",dto);
+    public ResponseEntity<Void> EliminarCliente(@PathVariable Long id) {
+        boolean eliminado = service.eliminarCliente(id);
 
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            ApiResponse<ClientesDTO> respuestaError = new ApiResponse<>(false,"No se ha podido eliminar el registro del cliente.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuestaError);
+        if (eliminado) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
+
     }
 
     @PutMapping("/{id}")

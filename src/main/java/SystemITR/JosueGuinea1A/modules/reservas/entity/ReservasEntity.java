@@ -1,5 +1,7 @@
 package SystemITR.JosueGuinea1A.modules.reservas.entity;
 
+import SystemITR.JosueGuinea1A.modules.clientes.entity.ClientesEntity;
+import SystemITR.JosueGuinea1A.modules.vehiculos.entity.VehiculosEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,9 +41,9 @@ public class ReservasEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente")
-    private int idCliente;
+    private ClientesEntity idCliente;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_vehiculo")
-    private int idVehiculo;
+    private VehiculosEntity idVehiculo;
 }
