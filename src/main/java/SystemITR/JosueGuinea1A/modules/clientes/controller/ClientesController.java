@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController @CrossOrigin
 @RequestMapping("/api/clientes")
 public class ClientesController {
@@ -27,6 +29,62 @@ public class ClientesController {
         } catch (Exception e) {
             e.printStackTrace();
             ApiResponse<ClientesDTO> respuestaError = new ApiResponse<>(false,"Error al registrar cliente.",json);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuestaError);
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<ClientesDTO>>> obtenerClientes() {
+        try {
+            List<ClientesDTO> lista = service.obtenerTodo();
+            ApiResponse<List<ClientesDTO>> response = new ApiResponse<>(true,"Clientes consultados con exito.",lista);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ApiResponse<List<ClientesDTO>> respuestaError = new ApiResponse<>(false,"No se han encontrado los registros de los clientes.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuestaError);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<ClientesDTO>> obtenerClientesID(@PathVariable Long id) {
+        try {
+            ClientesDTO dto = service.obtenerId(id);
+            ApiResponse<ClientesDTO> response = new ApiResponse<>(true,"Cliente consultado con exito.",dto);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ApiResponse<ClientesDTO> respuestaError = new ApiResponse<>(false,"No se ha encontrado el registro del cliente.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuestaError);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<ClientesDTO>> EliminarCliente(@PathVariable Long id) {
+        try {
+            ClientesDTO dto = service.eliminarCliente(id);
+            ApiResponse<ClientesDTO> response = new ApiResponse<>(true,"Cliente eliminado con exito.",dto);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ApiResponse<ClientesDTO> respuestaError = new ApiResponse<>(false,"No se ha podido eliminar el registro del cliente.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuestaError);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<ClientesDTO>> ActualizarCliente(@PathVariable Long id, ClientesDTO dto) {
+        try {
+            ClientesDTO registro = service.actualizarCliente(id, dto);
+            ApiResponse<ClientesDTO> response = new ApiResponse<>(true,"Cliente eliminado con exito.",registro);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ApiResponse<ClientesDTO> respuestaError = new ApiResponse<>(false,"No se ha podido eliminar el registro del cliente.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuestaError);
         }
     }

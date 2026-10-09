@@ -73,6 +73,19 @@ public class ClientesService {
         throw new DataNotFoundException("El ID de cliente no existe.");
     }
 
+    public ClientesDTO actualizarCliente (Long id, ClientesDTO dto) {
+        ClientesEntity entity = repo.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("No se encontró un regitro con ese ID."));
+
+        entity.setNombre(dto.getNombre());
+        entity.setApellido(dto.getApellido());
+        entity.setTelefono(dto.getTelefono());
+        entity.setEmail(dto.getEmail());
+        entity.setDireccion(dto.getDireccion());
+        ClientesEntity entityUpdated = repo.save(entity);
+        return ConvertirDTO(entityUpdated);
+    }
+
     public boolean eliminarCliente (Long id) {
         if (repo.existsById(id)) {
             repo.deleteById(id);
